@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>TicTacToeTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TicTacToeTest (Jan 13, 2022 5:15:43 PM)</a> &gt; <a href="../../index.html" class="el_group">Java05_TicTac</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">testing</a> &gt; <span class="el_source">TicTacToeTest.java</span></div><h1>TicTacToeTest.java</h1><pre class="source lang-java linenums">package testing;
+import tictactoe.TicTacToeAI;
+import tictactoe.TicTacToeMain;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import javax.swing.JButton;
+
+import org.junit.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import static org.easymock.EasyMock.*;
+import org.junit.*;
+
+<span class="fc" id="L15">public class TicTacToeTest {</span>
+<span class="fc" id="L16">	  public static TicTacToeAI tictactoe = new TicTacToeAI();</span>
+<span class="fc" id="L17">	  public static TicTacToeMain window = new TicTacToeMain();</span>
+	  
+	  @Before
+	  public void clear() {
+<span class="fc bfc" id="L21" title="All 2 branches covered.">		  for(int i=0;i&lt;3;i++)</span>
+<span class="fc bfc" id="L22" title="All 2 branches covered.">				for(int j=0;j&lt;3;j++)</span>
+<span class="fc" id="L23">					tictactoe.setBoardValue(i, j, TicTacToeAI.EMPTY); </span>
+<span class="fc" id="L24">	  }</span>
+
+	  @ParameterizedTest
+	  @CsvFileSource(resources = {&quot;./testData.csv&quot;})
+	  public void getBoardValue(int i, int j) { 
+<span class="fc" id="L29">		  assertEquals(TicTacToeAI.EMPTY, tictactoe.getBoardValue(i, j));</span>
+<span class="fc" id="L30">	  }</span>
+	  
+	  @ParameterizedTest
+	  @CsvFileSource(resources = {&quot;./testData.csv&quot;}, numLinesToSkip = 1)
+	  public void setBoardValue1(int i, int j) {
+<span class="fc" id="L35">		  tictactoe.setBoardValue(i, j, TicTacToeAI.ONE);</span>
+<span class="fc" id="L36">		  assertEquals(TicTacToeAI.EMPTY, tictactoe.getBoardValue(i, j));</span>
+<span class="fc" id="L37">	  }</span>
+	  
+	  @Test
+	  public void setBoardValue2() {
+<span class="fc" id="L41">		  tictactoe.setBoardValue(0, 2, TicTacToeAI.TWO);</span>
+<span class="fc" id="L42">		  assertEquals(TicTacToeAI.TWO, tictactoe.getBoardValue(0, 2));</span>
+<span class="fc" id="L43">	  }</span>
+	  
+	  @ParameterizedTest
+	  @CsvFileSource(resources = {&quot;./testData2.csv&quot;})
+	  public void inverse(int expected, int actual) {
+<span class="fc" id="L48">		  assertEquals(expected, tictactoe.inverse(actual));</span>
+<span class="fc" id="L49">	  }</span>
+	  
+	  @Test
+	  public void isWin1() {
+<span class="fc" id="L53">		  tictactoe.setBoardValue(0, 0, TicTacToeAI.ONE);</span>
+<span class="fc" id="L54">		  tictactoe.setBoardValue(1, 0, TicTacToeAI.TWO);</span>
+<span class="fc" id="L55">		  tictactoe.setBoardValue(1, 1, TicTacToeAI.ONE);</span>
+<span class="fc" id="L56">		  tictactoe.setBoardValue(0, 1, TicTacToeAI.TWO);</span>
+<span class="fc" id="L57">		  tictactoe.setBoardValue(2, 2, TicTacToeAI.ONE);</span>
+<span class="fc" id="L58">		  assertEquals(true, tictactoe.isWin(TicTacToeAI.ONE));</span>
+<span class="fc" id="L59">	  }</span>
+	  
+	  @Test
+	  public void isWin2() {
+<span class="fc" id="L63">		  tictactoe.setBoardValue(0, 0, TicTacToeAI.ONE);</span>
+<span class="fc" id="L64">		  tictactoe.setBoardValue(1, 0, TicTacToeAI.TWO);</span>
+<span class="fc" id="L65">		  tictactoe.setBoardValue(1, 1, TicTacToeAI.ONE);</span>
+<span class="fc" id="L66">		  tictactoe.setBoardValue(0, 1, TicTacToeAI.TWO);</span>
+<span class="fc" id="L67">		  assertEquals(false, tictactoe.isWin(TicTacToeAI.ONE));</span>
+<span class="fc" id="L68">	  }</span>
+	  
+	  @Test
+	  public void nextWinningMove1() { 
+<span class="fc" id="L72">		  tictactoe.setBoardValue(0, 0, TicTacToeAI.ONE);</span>
+<span class="fc" id="L73">		  tictactoe.setBoardValue(1, 0, TicTacToeAI.TWO);</span>
+<span class="fc" id="L74">		  tictactoe.setBoardValue(1, 1, TicTacToeAI.ONE);</span>
+<span class="fc" id="L75">		  tictactoe.setBoardValue(0, 1, TicTacToeAI.TWO);</span>
+<span class="fc" id="L76">		  int arr[] = tictactoe.nextWinningMove(TicTacToeAI.ONE);</span>
+<span class="fc" id="L77">		  assertEquals(2, arr[0]);</span>
+<span class="fc" id="L78">		  assertEquals(2, arr[1]);</span>
+<span class="fc" id="L79">	  }</span>
+	  
+	  @Test
+	  public void nextWinningMove2() {
+<span class="fc" id="L83">		  assertEquals(null, tictactoe.nextWinningMove(TicTacToeAI.ONE));</span>
+<span class="fc" id="L84">	  }</span>
+	  
+	  @Test
+	  public void nextMove1() {
+<span class="fc" id="L88">		  tictactoe.setBoardValue(1, 1, TicTacToeAI.EMPTY);</span>
+<span class="fc" id="L89">		  int arr[] = tictactoe.nextMove(TicTacToeAI.ONE);</span>
+<span class="fc" id="L90">		  assertEquals(1, arr[0]);</span>
+<span class="fc" id="L91">		  assertEquals(1, arr[1]);</span>
+<span class="fc" id="L92">	  }</span>
+	  
+	  @Test
+	  public void nextMove2() {
+<span class="fc" id="L96">		  tictactoe.setBoardValue(0, 0, TicTacToeAI.ONE);</span>
+<span class="fc" id="L97">		  tictactoe.setBoardValue(1, 0, TicTacToeAI.TWO);</span>
+<span class="fc" id="L98">		  tictactoe.setBoardValue(1, 1, TicTacToeAI.ONE);</span>
+<span class="fc" id="L99">		  tictactoe.setBoardValue(0, 1, TicTacToeAI.TWO);</span>
+<span class="fc" id="L100">		  int arr[] = tictactoe.nextMove(TicTacToeAI.ONE);</span>
+<span class="fc" id="L101">		  assertEquals(2, arr[0]);</span>
+<span class="fc" id="L102">		  assertEquals(2, arr[1]);</span>
+<span class="fc" id="L103">	  }</span>
+	  
+	  @Test
+	  public void nextMove3() {
+<span class="fc" id="L107">		  tictactoe.setBoardValue(1, 1, TicTacToeAI.ONE);</span>
+<span class="fc" id="L108">		  tictactoe.setBoardValue(0, 0, TicTacToeAI.TWO);</span>
+<span class="fc" id="L109">		  tictactoe.setBoardValue(0, 2, TicTacToeAI.ONE);</span>
+<span class="fc" id="L110">		  int arr[] = tictactoe.nextMove(TicTacToeAI.TWO);</span>
+<span class="fc" id="L111">		  assertEquals(2, arr[0]);</span>
+<span class="fc" id="L112">		  assertEquals(0, arr[1]);</span>
+<span class="fc" id="L113">	  }</span>
+	  
+	  @Test
+	  public void nextMove4() {
+<span class="fc" id="L117">		  tictactoe.setBoardValue(1, 1, TicTacToeAI.ONE);</span>
+<span class="fc" id="L118">		  tictactoe.setBoardValue(0, 0, TicTacToeAI.TWO);</span>
+<span class="fc" id="L119">		  tictactoe.setBoardValue(2, 2, TicTacToeAI.ONE);</span>
+<span class="fc" id="L120">		  tictactoe.setBoardValue(0, 1, TicTacToeAI.TWO);</span>
+<span class="fc" id="L121">		  tictactoe.setBoardValue(0, 2, TicTacToeAI.ONE);</span>
+<span class="fc" id="L122">		  int arr[] = tictactoe.nextMove(TicTacToeAI.TWO);</span>
+<span class="fc" id="L123">		  assertEquals(1, arr[0]);</span>
+<span class="fc" id="L124">		  assertEquals(0, arr[1]);</span>
+<span class="fc" id="L125">	  }</span>
+	  
+	  @Test
+	  public void nextMove5() {
+<span class="fc" id="L129">		  tictactoe.setBoardValue(1, 1, TicTacToeAI.ONE);</span>
+<span class="fc" id="L130">		  tictactoe.setBoardValue(0, 0, TicTacToeAI.TWO);</span>
+<span class="fc" id="L131">		  tictactoe.setBoardValue(0, 2, TicTacToeAI.ONE);</span>
+<span class="fc" id="L132">		  tictactoe.setBoardValue(2, 0, TicTacToeAI.TWO);</span>
+<span class="fc" id="L133">		  tictactoe.setBoardValue(1, 0, TicTacToeAI.ONE);</span>
+<span class="fc" id="L134">		  tictactoe.setBoardValue(1, 2, TicTacToeAI.TWO);</span>
+<span class="fc" id="L135">		  tictactoe.setBoardValue(0, 1, TicTacToeAI.ONE);</span>
+<span class="fc" id="L136">		  tictactoe.setBoardValue(2, 1, TicTacToeAI.TWO);</span>
+<span class="fc" id="L137">		  tictactoe.setBoardValue(2, 2, TicTacToeAI.ONE);</span>
+<span class="fc" id="L138">		  assertEquals(null, tictactoe.nextMove(TicTacToeAI.TWO));</span>
+<span class="fc" id="L139">	  }</span>
+
+	  @Test
+	  public void play() {
+<span class="fc" id="L143">		  JButton playButton = window.getPlayButton();</span>
+<span class="fc" id="L144">		  playButton.doClick();</span>
+<span class="fc" id="L145">		  assertEquals(TicTacToeAI.ONE, window.getHumanValue());</span>
+<span class="fc" id="L146">		  assertEquals(TicTacToeAI.TWO, window.getComputerValue());</span>
+<span class="fc" id="L147">		  assertEquals(true, window.isPlay());</span>
+<span class="fc" id="L148">		  assertEquals(&quot;Your Turn&quot;, window.getStatusLabel().getText());</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">		  for(int i=0; i&lt;3; i++)</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">			  for(int j=0; j&lt;3; j++) </span>
+<span class="fc" id="L151">				  assertEquals(true, window.getButton(i, j).isEnabled());</span>
+<span class="fc" id="L152">	  }</span>
+	  
+	  @Test
+	  public void click1() {
+<span class="fc" id="L156">		  window.getPlayButton().doClick();</span>
+<span class="fc" id="L157">		  JButton buttonHuman = window.getButton(1,1);</span>
+<span class="fc" id="L158">		  JButton buttonComputer = window.getButton(0,0);</span>
+<span class="fc" id="L159">		  buttonHuman.doClick();</span>
+<span class="fc" id="L160">		  assertEquals(window.getChars(window.getHumanValue()), buttonHuman.getText());</span>
+<span class="fc" id="L161">		  assertEquals(window.getChars(window.getComputerValue()), buttonComputer.getText());</span>
+<span class="fc" id="L162">		  assertEquals(&quot;Your Turn&quot;, window.getStatusLabel().getText());</span>
+<span class="fc" id="L163">	  }</span>
+	  
+	  @Test
+	  public void click2() {
+<span class="fc" id="L167">		  window.getPlayButton().doClick();</span>
+<span class="fc" id="L168">		  window.getGame().setBoardValue(1, 1, 2);</span>
+<span class="fc" id="L169">		  window.getButton(1, 1).setText(window.getChars(2));</span>
+<span class="fc" id="L170">		  JButton button = window.getButton(1,1);</span>
+<span class="fc" id="L171">		  button.doClick();</span>
+<span class="fc" id="L172">		  assertEquals(window.getChars(2), button.getText());</span>
+<span class="fc" id="L173">	  }</span>
+	  
+	  @Test
+	  public void click3() {
+<span class="fc" id="L177">		  window.getPlayButton().doClick();</span>
+<span class="fc" id="L178">		  TicTacToeAI mock = createNiceMock(TicTacToeAI.class);</span>
+<span class="fc" id="L179">		  expect(mock.getBoardValue(1,1)).andReturn(TicTacToeAI.EMPTY);</span>
+<span class="fc" id="L180">		  expect(mock.isWin(1)).andReturn(true);</span>
+<span class="fc" id="L181">		  expect(mock.isWin(2)).andReturn(false);</span>
+<span class="fc" id="L182">		  expect(mock.nextMove(1)).andReturn(new int[] {0,0});</span>
+<span class="fc" id="L183">		  expect(mock.nextMove(2)).andReturn(new int[] {0,0});</span>
+<span class="fc" id="L184">		  replay(mock);</span>
+<span class="fc" id="L185">		  window.setGame(mock);</span>
+<span class="fc" id="L186">		  JButton buttonHuman = window.getButton(1,1);</span>
+<span class="fc" id="L187">		  buttonHuman.doClick();</span>
+<span class="fc" id="L188">		  assertEquals(window.getChars(window.getHumanValue()), buttonHuman.getText());</span>
+<span class="fc" id="L189">		  assertEquals(&quot;Congratulations, You've Won!&quot;, window.getStatusLabel().getText());</span>
+<span class="fc" id="L190">		  assertEquals(false, window.isPlay());</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">		  for(int i=0; i&lt;3; i++)</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">			  for(int j=0; j&lt;3; j++) </span>
+<span class="fc" id="L193">				  assertEquals(false, window.getButton(i, j).isEnabled());</span>
+<span class="fc" id="L194">	  }</span>
+	  
+	  @Test
+	  public void click4() {
+<span class="fc" id="L198">		  window.getPlayButton().doClick();</span>
+<span class="fc" id="L199">		  TicTacToeAI mock = createNiceMock(TicTacToeAI.class);</span>
+<span class="fc" id="L200">		  expect(mock.getBoardValue(1,1)).andReturn(TicTacToeAI.EMPTY);</span>
+<span class="fc" id="L201">		  expect(mock.isWin(1)).andReturn(false);</span>
+<span class="fc" id="L202">		  expect(mock.isWin(2)).andReturn(true);</span>
+<span class="fc" id="L203">		  expect(mock.nextMove(1)).andReturn(new int[] {0,0});</span>
+<span class="fc" id="L204">		  expect(mock.nextMove(2)).andReturn(new int[] {0,0});</span>
+<span class="fc" id="L205">		  replay(mock);</span>
+<span class="fc" id="L206">		  window.setGame(mock);</span>
+<span class="fc" id="L207">		  JButton buttonComputer = window.getButton(2,0);</span>
+<span class="fc" id="L208">		  buttonComputer.doClick();</span>
+<span class="fc" id="L209">		  assertEquals(window.getChars(window.getHumanValue()), buttonComputer.getText());</span>
+<span class="fc" id="L210">		  assertEquals(&quot;Sorry, You Lose!&quot;, window.getStatusLabel().getText());</span>
+<span class="fc" id="L211">		  assertEquals(false, window.isPlay());</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">		  for(int i=0; i&lt;3; i++)</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">			  for(int j=0; j&lt;3; j++) </span>
+<span class="fc" id="L214">				  assertEquals(false, window.getButton(i, j).isEnabled());</span>
+<span class="fc" id="L215">	  }</span>
+	  
+	  @Test
+	  public void click5() {
+<span class="fc" id="L219">		  window.getPlayButton().doClick();</span>
+<span class="fc" id="L220">		  TicTacToeAI mock = createNiceMock(TicTacToeAI.class);</span>
+<span class="fc" id="L221">		  expect(mock.getBoardValue(1,1)).andReturn(TicTacToeAI.EMPTY);</span>
+<span class="fc" id="L222">		  expect(mock.isWin(1)).andReturn(false);</span>
+<span class="fc" id="L223">		  expect(mock.isWin(2)).andReturn(false);</span>
+<span class="fc" id="L224">		  expect(mock.nextMove(1)).andReturn(null);</span>
+<span class="fc" id="L225">		  expect(mock.nextMove(2)).andReturn(null);</span>
+<span class="fc" id="L226">		  replay(mock);</span>
+<span class="fc" id="L227">		  window.setGame(mock);</span>
+<span class="fc" id="L228">		  JButton buttonComputer = window.getButton(2,2);</span>
+<span class="fc" id="L229">		  buttonComputer.doClick();</span>
+<span class="fc" id="L230">		  assertEquals(window.getChars(window.getHumanValue()), buttonComputer.getText());</span>
+<span class="fc" id="L231">		  assertEquals(&quot;Draw, Click 'Play' For Rematch!&quot;, window.getStatusLabel().getText());</span>
+<span class="fc" id="L232">		  assertEquals(false, window.isPlay());</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">		  for(int i=0; i&lt;3; i++)</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">			  for(int j=0; j&lt;3; j++) </span>
+<span class="fc" id="L235">				  assertEquals(false, window.getButton(i, j).isEnabled());</span>
+<span class="fc" id="L236">	  }</span>
+	  
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>TicTacToeTest (Jan 13, 2022 5:15:43 PM)</div></body></html>

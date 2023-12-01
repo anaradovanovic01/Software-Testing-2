@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>TicTacToeAI.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TicTacToeTest (Jan 13, 2022 5:15:43 PM)</a> &gt; <a href="../../index.html" class="el_group">Java05_TicTac</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">tictactoe</a> &gt; <span class="el_source">TicTacToeAI.java</span></div><h1>TicTacToeAI.java</h1><pre class="source lang-java linenums">package tictactoe;
+
+public class TicTacToeAI {
+
+ /* the board */
+ private int board[][];
+ /* empty */
+ public static final int EMPTY = 0;
+ /* player one */
+ public static final int ONE = 1;
+ /* player two */
+    public static final int TWO = 2;
+
+<span class="fc" id="L14"> public TicTacToeAI() {</span>
+<span class="fc" id="L15">  board = new int[3][3];</span>
+<span class="fc" id="L16"> }</span>
+ 
+ /* get the board value for position (i,j) */
+ public int getBoardValue(int i,int j) {
+<span class="fc bfc" id="L20" title="All 4 branches covered.">  if(i &lt; 0 || i &gt;= 3) return EMPTY;</span>
+<span class="fc bfc" id="L21" title="All 4 branches covered.">  if(j &lt; 0 || j &gt;= 3) return EMPTY;</span>
+<span class="fc" id="L22">  return board[i][j];</span>
+    }
+
+ /* set the board value for position (i,j) */
+ public void setBoardValue(int i,int j,int token) {
+<span class="fc bfc" id="L27" title="All 4 branches covered.">  if(i &lt; 0 || i &gt;= 3) return;</span>
+<span class="fc bfc" id="L28" title="All 4 branches covered.">  if(j &lt; 0 || j &gt;= 3) return;</span>
+<span class="fc" id="L29">  board[i][j] = token;</span>
+<span class="fc" id="L30">    }</span>
+
+ /* calculate the winning move for current token */
+ public int []nextWinningMove(int token) {
+
+<span class="fc bfc" id="L35" title="All 2 branches covered.">  for(int i=0;i&lt;3;i++)</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">   for(int j=0;j&lt;3;j++)</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">    if(getBoardValue(i, j)==EMPTY) {</span>
+<span class="fc" id="L38">     board[i][j] = token;</span>
+<span class="fc" id="L39">     boolean win = isWin(token);</span>
+<span class="fc" id="L40">     board[i][j] = EMPTY;</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">     if(win) return new int[]{i,j};</span>
+    }
+
+<span class="fc" id="L44">  return null;</span>
+    }
+
+    public int inverse(int token) {
+<span class="fc bfc" id="L48" title="All 2 branches covered.">  return token==ONE ? TWO : ONE;</span>
+ }
+
+    /* calculate the best move for current token */
+    public int []nextMove(int token) {
+
+        /* lucky position in the center of board*/
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if(getBoardValue(1, 1)==EMPTY) return new int[]{1,1};</span>
+
+        /* if we can move on the next turn */
+<span class="fc" id="L58">        int winMove[] = nextWinningMove(token);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if(winMove!=null) return winMove;</span>
+
+        /* choose the move that prevent enemy to win */
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        for(int i=0;i&lt;3;i++)</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">            for(int j=0;j&lt;3;j++)</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">                if(getBoardValue(i, j)==EMPTY)</span>
+                {
+<span class="fc" id="L66">                    board[i][j] = token;</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">              boolean ok = nextWinningMove(inverse(token)) == null;</span>
+<span class="fc" id="L68">                    board[i][j] = EMPTY;</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">                    if(ok) return new int[]{i,j};</span>
+                }
+
+        /* choose available move */
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for(int i=0;i&lt;3;i++)</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">            for(int j=0;j&lt;3;j++)</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">                if(getBoardValue(i, j)==EMPTY)</span>
+<span class="fc" id="L76">                    return new int[]{i,j};</span>
+
+        /* no move is available */
+<span class="fc" id="L79">        return null;</span>
+    }
+
+ /* determine if current token is win or not win */
+ public boolean isWin(int token) {
+<span class="fc" id="L84">  final int DI[]={-1,0,1,1};</span>
+<span class="fc" id="L85">  final int DJ[]={1,1,1,0};</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">  for(int i=0;i&lt;3;i++)</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">   for(int j=0;j&lt;3;j++) {</span>
+
+    /* we skip if the token in position(i,j) not equal current token */
+<span class="fc bfc" id="L90" title="All 2 branches covered.">    if(getBoardValue(i, j)!=token) continue;</span>
+
+<span class="fc bfc" id="L92" title="All 2 branches covered.">    for(int k=0;k&lt;4;k++) {</span>
+<span class="fc" id="L93">     int ctr = 0;</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">                 while(getBoardValue(i+DI[k]*ctr, j+DJ[k]*ctr)==token) ctr++;</span>
+
+<span class="fc bfc" id="L96" title="All 2 branches covered.">     if(ctr==3) return true;</span>
+    }
+  }
+<span class="fc" id="L99">  return false;</span>
+    }
+} 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>TicTacToeTest (Jan 13, 2022 5:15:43 PM)</div></body></html>
